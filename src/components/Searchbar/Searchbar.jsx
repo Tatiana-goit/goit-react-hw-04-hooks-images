@@ -32,4 +32,4 @@ export default function Searchbar({ onSearch }) {
 
 Searchbar.propTypes = {
   onSearch: PropTypes.func.isRequired,
-}
+};

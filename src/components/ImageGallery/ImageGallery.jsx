@@ -8,7 +8,7 @@ export default function ImageGallery({ images, onModal }) {
       {images.map(image => {
         return (
           <ImageGalleryItem
-            key={image.id} 
+            key={image.id}
             src={image.webformatURL}
             alt={image.tags}
             image={image}
