@@ -1,7 +1,6 @@
 import './App.css';
 import { Component } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-
 import Searchbar from './components/Searchbar/Searchbar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
 import Modal from './components/Modal/Modal';
