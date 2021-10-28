@@ -5,7 +5,7 @@ import Searchbar from '../Searchbar/Searchbar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
-import api from '../../services/gallery-api';
+import fetchImages from '../../services/gallery-api';
 import Loader from '../Loader/Loader';
 
 const Status = {
@@ -26,15 +26,14 @@ export default function App() {
 
   useEffect(() => {
     if (status === Status.PENDING) {
-      api
-        .fetchImages(imageName, page)
+      fetchImages(imageName, page)
         .then(newImages => {
           if (newImages.length === 0) {
             toast.error(`Oops, we did not find such picture as ${imageName}`);
             setStatus(Status.IDLE);
             return;
           }
-          setImages(state => [...state, ...newImages]);
+          setImages(images => [...images, ...newImages]);
           setStatus(Status.RESOLVED);
         })
         .catch(error => {
