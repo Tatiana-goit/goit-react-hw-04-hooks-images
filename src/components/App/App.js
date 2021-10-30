@@ -23,7 +23,7 @@ export default function App() {
   const [status, setStatus] = useState(Status.IDLE);
   const [page, setPage] = useState(1);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [, setError] = useState(null);
+  const [error, setError] = useState(null);
   const [showModal, setshowModal] = useState(false);
 
   useEffect(() => {
