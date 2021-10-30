@@ -1,12 +1,14 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import Container from '../Container/Container';
 import Searchbar from '../Searchbar/Searchbar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 import fetchImages from '../../services/gallery-api';
 import Loader from '../Loader/Loader';
+import scrollPageDown from '../../helpers/scrollPageDown';
 
 const Status = {
   IDLE: 'idle',
@@ -21,7 +23,7 @@ export default function App() {
   const [status, setStatus] = useState(Status.IDLE);
   const [page, setPage] = useState(1);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [error, setError] = useState(null);
+  const [, setError] = useState(null);
   const [showModal, setshowModal] = useState(false);
 
   useEffect(() => {
@@ -35,20 +37,15 @@ export default function App() {
           }
           setImages(images => [...images, ...newImages]);
           setStatus(Status.RESOLVED);
+          if (page !== 1) scrollPageDown();
         })
         .catch(error => {
           setError(error);
           setStatus(Status.REJECTED);
         });
     }
-
-    if (page !== 1) {
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth',
-      });
-    }
-  }, [imageName, page, status, error]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   const handleFormSubmit = imageName => {
     if (imageName.trim() !== '') {
@@ -75,25 +72,27 @@ export default function App() {
 
   return (
     <div className="App">
-      <Searchbar onSearch={handleFormSubmit} />
-      <Toaster position="top-right" />
-      <ImageGallery images={images} onModal={clickImages} />
-      {status === Status.RESOLVED && (
-        <Button type="button" onClick={handleLoadMoreBtnClick}>
-          Load more
-        </Button>
-      )}
+      <Container>
+        <Searchbar onSearch={handleFormSubmit} />
+        <Toaster position="top-right" />
+        <ImageGallery images={images} onModal={clickImages} />
+        {status === Status.RESOLVED && (
+          <Button type="button" onClick={handleLoadMoreBtnClick}>
+            Load more
+          </Button>
+        )}
 
-      {showModal && (
-        <>
-          <Loader />
-          <Modal onModal={toggleModal}>
-            <img src={selectedImage.largeImageURL} alt={selectedImage.tags} />
-          </Modal>
-        </>
-      )}
+        {showModal && (
+          <>
+            <Loader />
+            <Modal onModal={toggleModal}>
+              <img src={selectedImage.largeImageURL} alt={selectedImage.tags} />
+            </Modal>
+          </>
+        )}
 
-      {status === Status.PENDING && <Loader />}
+        {status === Status.PENDING && <Loader />}
+      </Container>
     </div>
   );
 }
